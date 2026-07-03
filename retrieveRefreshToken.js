@@ -1,6 +1,3 @@
-const CLIENT_ID = 208780
-const CLIENT_SECRET = 'c694420fe9b758104c4c07bd20a13c019bc98395'
-
 async function retrieveRefreshToken() {
   try {
     const response = await fetch('./info.json')
