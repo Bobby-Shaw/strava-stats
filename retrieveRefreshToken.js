@@ -18,4 +18,4 @@ async function retrieveRefreshToken() {
   }
 }
 
-module.exports(retrieveRefreshToken)
+module.exports = { retrieveRefreshToken }
