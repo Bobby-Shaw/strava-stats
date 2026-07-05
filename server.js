@@ -20,6 +20,10 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html")
 })
 
+app.get("/activites", (req, res) => {
+    res.sendFile(__dirname + "/public/activites.html")
+})
+
 app.get("/exchange_token", async(req, res) => {
     // gets code from url
     const { returnCode } = require('./authorize_functions/returnCode')
@@ -58,5 +62,7 @@ app.get("/exchange_token", async(req, res) => {
     } else {
         console.log("Error - Access token could not be retrieved")
     }
+
+    res.redirect("/activites")
 
 })
