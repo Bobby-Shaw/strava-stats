@@ -5,14 +5,19 @@ const port = 3000
 app.use(express.static("public"));
 app.use(express.json());
 
-const CLIENT_ID = 208780
-const CLIENT_SECRET = 'c694420fe9b758104c4c07bd20a13c019bc98395'
+const dotenv = require('dotenv')
+dotenv.config()
+
+const CLIENT_ID = Number(process.env.CLIENT_ID)
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+
 
 app.listen(port, (err) => {
     if (err) {
         console.log("Error: "+ err)
     } else {
         console.log(`Server listening on port ${port}`)
+        console.log(typeof CLIENT_ID + ", " + typeof CLIENT_SECRET)
     }
 })
 
@@ -61,7 +66,7 @@ app.get("/exchange_token", async(req, res) => {
 
     // exchanges refresh token for access token
     const {retrieveAccessToken} = require("./authorize_functions/retrieveAccessToken")
-    const access_token = await retrieveAccessToken(refresh_token)
+    const access_token = await retrieveAccessToken(refresh_token, CLIENT_ID, CLIENT_SECRET)
 
     if (access_token !== null) {
         console.log("Access Token: " + access_token)
