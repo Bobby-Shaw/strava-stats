@@ -84,13 +84,14 @@ button:focus-visible {
 #runsData-div {
     width: min(100%, 560px);
     margin-top: 22px;
+    display: grid;
+    gap: 20px;
 }
 
 .run-card {
     width: 100%;
     max-width: 560px;
     padding: 28px;
-    margin: 15px 0px;
     border: 1px solid rgba(216, 222, 230, 0.9);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.9);

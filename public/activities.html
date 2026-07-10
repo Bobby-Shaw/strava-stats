@@ -7,10 +7,11 @@
     <body>
         <p>You are authorised</p>
         <div>
-            <label for="run-range">Number of runs: <span id="sliderValue">5</span></label>
-            <input type="range" id="run-range" name="runs-range" min="1" max="10" value="5" onchange="updateSliderValue()">
+            <label for="run-range">Number of runs: <span id="sliderValue">20</span></label>
+            <input type="range" id="run-range" name="runs-range" min="1" max="30" value="20" onchange="updateSliderValue()">
             <button id="getRuns-btn">Get Runs</button>
         </div>
+        <div id="runsOverview"></div>
         <div id="runsData-div"></div>
     </body>
     <script src="./activities.js"></script>
