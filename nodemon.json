@@ -1,5 +1,7 @@
 {
-  "watch": ["server.js"],
   "ext": "js",
-  "exec": "node server.js"
+  "exec": "node server.js",
+  "ignore": [
+    "info.json"
+  ]
 }

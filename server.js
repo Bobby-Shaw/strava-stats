@@ -14,10 +14,9 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET
 
 app.listen(port, (err) => {
     if (err) {
-        console.log("Error: "+ err)
+        console.error(err)
     } else {
-        console.log(`Server listening on port ${port}`)
-        console.log(typeof CLIENT_ID + ", " + typeof CLIENT_SECRET)
+        console.log(`Server listening on port ${port}\n`)
     }
 })
 
@@ -33,21 +32,22 @@ app.get("/activites", (req, res) => {
     res.sendFile(__dirname + "/public/activites.html")
 })
 
-app.get("/last_run", (req, res) => {
+app.post("/last_run", async (req, res) => {
     const { returnLastRun } = require("./returnLastRun")
     const { returnAccessToken } = require("./authorize_functions/returnAccessToken")
-    eturnLastRun(returnAccessToken())
-    res.json()
+    const access_token = await returnAccessToken()
+    const last_run_object = await returnLastRun(access_token)
+    res.json(last_run_object)
 })
 
-app.get("/exchange_token", async(req, res) => {
+app.get("/exchange_token", async (req, res) => {
     // gets code from url
     const { returnCode } = require('./authorize_functions/returnCode')
     let url = req.protocol + '://' + req.get('host') + req.originalUrl;
     
     const code = returnCode(url)
     if (code === null) {
-        console.log("Error - Could not find code")
+        console.error("Error - Could not find code")
         res.redirect("/error")
     } else {
         console.log("Code: " + code)
@@ -60,11 +60,11 @@ app.get("/exchange_token", async(req, res) => {
     })
     .then(response => response.json())
     .then(data => data)
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
 
     let refresh_token = ''
     if (!('refresh_token' in response)) {
-        console.log("Error - Could not read refresh token")
+        console.error("Error - Could not read refresh token")
         res.redirect("/error")
     } else {
         refresh_token = response.refresh_token
@@ -78,10 +78,10 @@ app.get("/exchange_token", async(req, res) => {
     if (object.access_token !== null) {
         const { saveAccessToken } = require("./authorize_functions/saveAccessToken")
         saveAccessToken(object.access_token, object.expires_at)
-        console.log("Access Token: " + object.access_token)
+        console.log("Access Token: " + object.access_token + "\n")
         res.redirect("/activites")
     } else {
-        console.log("Error - Access token could not be retrieved")
+        console.error("Error - Access token could not be retrieved")
         res.redirect("/error")
     }
 

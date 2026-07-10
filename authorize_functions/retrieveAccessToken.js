@@ -5,13 +5,15 @@ async function retrieveAccessToken(refresh_token, client_id, client_secret) {
     })
     .then(response => response.json())
     .then(data => data)
-    .catch(err => console.log(err))
-
+    .catch(err => console.error(err))
 
     if (!("access_token" in response)) {
         return null
     } else {
-        return response.access_token
+        return {
+            "access_token": response.access_token,
+            "expires_at": response.expires_at
+        }
     }
 
 }
