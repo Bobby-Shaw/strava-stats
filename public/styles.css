@@ -76,20 +76,21 @@ button:focus-visible {
 }
 
 #authorize-btn,
-#getLastRun-btn {
+#getRuns-btn {
     min-width: 150px;
 }
 
 #strava-stats,
-#lastRunData-div {
+#runsData-div {
     width: min(100%, 560px);
     margin-top: 22px;
 }
 
-#results-card {
+.run-card {
     width: 100%;
     max-width: 560px;
     padding: 28px;
+    margin: 15px 0px;
     border: 1px solid rgba(216, 222, 230, 0.9);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.9);
@@ -97,14 +98,14 @@ button:focus-visible {
     backdrop-filter: blur(14px);
 }
 
-#title {
+.run-title {
     margin: 0 0 22px;
     color: var(--text);
     font-size: clamp(1.35rem, 4vw, 2rem);
     line-height: 1.1;
 }
 
-#horizontal_stats {
+.run-stats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
@@ -112,7 +113,7 @@ button:focus-visible {
     line-height: 1.45;
 }
 
-#horizontal_stats p {
+.run-stats p {
     min-height: 92px;
     margin: 0;
     padding: 16px;
@@ -144,7 +145,7 @@ button:focus-visible {
         left: 18px;
     }
 
-    #horizontal_stats {
+    .run-stats {
         grid-template-columns: 1fr;
     }
 }

@@ -26,8 +26,9 @@ app.use(session({
 
 function requireAuth(req, res, next) {
     if (!req.session || !req.session.authorized) {
-        res.redirect("/error");
+        return res.redirect("/error");
     }
+
     next();
 }
 
@@ -51,16 +52,18 @@ app.get("/error", (req, res) => {
     res.sendFile(__dirname + "/public/error.html")
 })
 
-app.get("/activites", requireAuth, (req, res) => {
-    res.sendFile(__dirname + "/public/activites.html")
+app.get("/activities", requireAuth, (req, res) => {
+    res.sendFile(__dirname + "/public/activities.html")
 })
 
-app.get("/last_run", requireAuth, async (req, res) => {
-    const { returnLastRun } = require("./returnLastRun")
+app.post("/runs", requireAuth, async (req, res) => {
+    console.log(req.body)
+    const numberOfRuns = req.body.numberOfRuns
+    const { returnRuns } = require("./returnRuns")
     const { returnAccessToken } = require("./authorize_functions/returnAccessToken")
     const access_token = await returnAccessToken()
-    const last_run_object = await returnLastRun(access_token)
-    res.json(last_run_object)
+    const runs = await returnRuns(access_token, numberOfRuns)
+    res.json(runs)
 })
 app.get("/exchange_token", async (req, res) => {
     // gets code from url
@@ -70,7 +73,7 @@ app.get("/exchange_token", async (req, res) => {
     const code = returnCode(url)
     if (code === null) {
         console.error("Error - Could not find code")
-        res.redirect("/error")
+        return res.redirect("/error")
     }
 
     // exchanges code for refresh token
@@ -83,9 +86,9 @@ app.get("/exchange_token", async (req, res) => {
     .catch(err => console.error(err))
 
     let refresh_token = ''
-    if (!('refresh_token' in response)) {
+    if (!response || !('refresh_token' in response)) {
         console.error("Error - Could not read refresh token")
-        res.redirect("/error")
+        return res.redirect("/error")
     } else {
         refresh_token = response.refresh_token
     }
@@ -98,10 +101,10 @@ app.get("/exchange_token", async (req, res) => {
         const { saveAccessToken } = require("./authorize_functions/saveAccessToken")
         saveAccessToken(object.access_token, object.expires_at)
         req.session.authorized = true
-        res.redirect("/activites")
+        res.redirect("/activities")
     } else {
         console.error("Error - Access token could not be retrieved")
-        res.redirect("/error")
+        return res.redirect("/error")
     }
 
 })

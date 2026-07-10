@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Activities</title>
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+    <body>
+        <p>You are authorised</p>
+        <div>
+            <label for="run-range">Number of runs: <span id="sliderValue">5</span></label>
+            <input type="range" id="run-range" name="runs-range" min="1" max="10" value="5" onchange="updateSliderValue()">
+            <button id="getRuns-btn">Get Runs</button>
+        </div>
+        <div id="runsData-div"></div>
+    </body>
+    <script src="./activities.js"></script>
+</html>
