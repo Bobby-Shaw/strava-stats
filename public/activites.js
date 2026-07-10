@@ -12,8 +12,9 @@ function displayData(response) {
     <div id="results-card">
         <h1 id="title">${response.name}</h3>    
         <div id="horizontal_stats">
-            <p><span class="label">Distance:</span> <br> ${kmFormatter.format(response.distance / 1000 )}km</p>
+            <p><span class="label">Distance:</span> <br> ${kmFormatter.format(response.distance / 1000 )} km</p>
             <p><span class="label">Time: </span> <br> ${Math.round(Number(response.elapsed_time) / 60)} mins</p>
+            <p><span class="label">Avg Heart Rate: </span> <br> ${response.average_heartrate} bpm</p> 
         </div>
     </div>
     `
