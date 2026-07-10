@@ -6,5 +6,5 @@ document.getElementById('getLastRun-btn').addEventListener('click', async functi
     .then(data => data)
     .catch(err => console.error(err))
 
-    console.log(response)
+    document.getElementById("lastRunData-div").innerText = JSON.stringify(response[0], null, 2)
 })
