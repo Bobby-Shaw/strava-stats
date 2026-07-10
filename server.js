@@ -1,12 +1,35 @@
 const fs = require('fs')
+const dotenv = require('dotenv')
 const express = require('express')
+dotenv.config()
+
 const app = express()
+const session = require('express-session')
 const port = 3000
+
+if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET must be set in .env")
+}
+
 app.use(express.static("public"));
 app.use(express.json());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false
+    }
+}))
 
-const dotenv = require('dotenv')
-dotenv.config()
+function requireAuth(req, res, next) {
+    if (!req.session || !req.session.authorized) {
+        res.redirect("/error");
+    }
+    next();
+}
 
 const CLIENT_ID = Number(process.env.CLIENT_ID)
 const CLIENT_SECRET = process.env.CLIENT_SECRET
@@ -28,11 +51,11 @@ app.get("/error", (req, res) => {
     res.sendFile(__dirname + "/public/error.html")
 })
 
-app.get("/activites", (req, res) => {
+app.get("/activites", requireAuth, (req, res) => {
     res.sendFile(__dirname + "/public/activites.html")
 })
 
-app.get("/last_run", async (req, res) => {
+app.get("/last_run", requireAuth, async (req, res) => {
     const { returnLastRun } = require("./returnLastRun")
     const { returnAccessToken } = require("./authorize_functions/returnAccessToken")
     const access_token = await returnAccessToken()
@@ -74,6 +97,7 @@ app.get("/exchange_token", async (req, res) => {
     if (object.access_token !== null) {
         const { saveAccessToken } = require("./authorize_functions/saveAccessToken")
         saveAccessToken(object.access_token, object.expires_at)
+        req.session.authorized = true
         res.redirect("/activites")
     } else {
         console.error("Error - Access token could not be retrieved")
