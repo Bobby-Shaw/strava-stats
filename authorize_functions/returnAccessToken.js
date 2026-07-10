@@ -5,7 +5,6 @@ async function returnAccessToken() {
     try {
         const rawData = await fs.readFile(filePath, 'utf8')
         const jsonData = JSON.parse(rawData)
-        console.log("Returning: " + jsonData.access_token)
         return jsonData.access_token
 
     } catch(err) {

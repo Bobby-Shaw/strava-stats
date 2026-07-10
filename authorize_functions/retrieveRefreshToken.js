@@ -6,7 +6,6 @@ async function retrieveRefreshToken() {
       .catch(error => console.error('Error fetching JSON:', error));
 
     const refresh_token = response.refresh_token
-    
     if (typeof refresh_token === "string" && refresh_token.length === 0) {
       return null
     } else {

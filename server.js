@@ -32,14 +32,13 @@ app.get("/activites", (req, res) => {
     res.sendFile(__dirname + "/public/activites.html")
 })
 
-app.post("/last_run", async (req, res) => {
+app.get("/last_run", async (req, res) => {
     const { returnLastRun } = require("./returnLastRun")
     const { returnAccessToken } = require("./authorize_functions/returnAccessToken")
     const access_token = await returnAccessToken()
     const last_run_object = await returnLastRun(access_token)
     res.json(last_run_object)
 })
-
 app.get("/exchange_token", async (req, res) => {
     // gets code from url
     const { returnCode } = require('./authorize_functions/returnCode')
@@ -49,8 +48,6 @@ app.get("/exchange_token", async (req, res) => {
     if (code === null) {
         console.error("Error - Could not find code")
         res.redirect("/error")
-    } else {
-        console.log("Code: " + code)
     }
 
     // exchanges code for refresh token
@@ -68,7 +65,6 @@ app.get("/exchange_token", async (req, res) => {
         res.redirect("/error")
     } else {
         refresh_token = response.refresh_token
-        console.log("Refresh Token: " + refresh_token)
     }
 
     // exchanges refresh token for access token
@@ -78,7 +74,6 @@ app.get("/exchange_token", async (req, res) => {
     if (object.access_token !== null) {
         const { saveAccessToken } = require("./authorize_functions/saveAccessToken")
         saveAccessToken(object.access_token, object.expires_at)
-        console.log("Access Token: " + object.access_token + "\n")
         res.redirect("/activites")
     } else {
         console.error("Error - Access token could not be retrieved")
