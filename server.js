@@ -28,13 +28,11 @@ function requireAuth(req, res, next) {
     if (!req.session || !req.session.authorized) {
         return res.redirect("/error");
     }
-
     next();
 }
 
 const CLIENT_ID = Number(process.env.CLIENT_ID)
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-
+const CLIENT_SECRET = String(process.env.CLIENT_SECRET)
 
 app.listen(port, (err) => {
     if (err) {
@@ -99,7 +97,7 @@ app.get("/exchange_token", async (req, res) => {
 
     if (object.access_token !== null) {
         const { saveAccessToken } = require("./authorize_functions/saveAccessToken")
-        saveAccessToken(object.access_token, object.expires_at)
+        await saveAccessToken(object.access_token, object.expires_at)
         req.session.authorized = true
         res.redirect("/activities")
     } else {
